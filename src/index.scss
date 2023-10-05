@@ -1,0 +1,8 @@
+.wp-block-navigation .mega-menu-wrapper .wp-block-navigation-item {
+  position: static;
+}
+
+.wp-block-navigation .mega-menu-wrapper .has-child .wp-block-navigation__submenu-container {
+  width: 100% !important;
+  position: absolute;
+}
