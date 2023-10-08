@@ -3,10 +3,10 @@ import {createHigherOrderComponent} from '@wordpress/compose';
 import {InspectorControls} from '@wordpress/block-editor';
 import {PanelBody, RangeControl, __experimentalUnitControl as UnitControl} from '@wordpress/components';
 
-import { BlockControls} from '@wordpress/block-editor';
+import {BlockControls} from '@wordpress/block-editor';
 import {Toolbar, ToolbarGroup, ToolbarButton} from '@wordpress/components';
 
-import { grid } from '@wordpress/icons';
+import {grid} from '@wordpress/icons';
 
 import './index.scss';
 
@@ -54,6 +54,30 @@ import './index.scss';
 //     wrapSubNavigationBlockInContainer
 // );
 
+// Add Sub Nav Attribute
+const addSubNavAttribute = (settings, name) => {
+    if (name !== 'core/navigation-submenu') {
+        return settings;
+    }
+
+    if (typeof settings.attributes !== 'undefined') {
+        settings.attributes = Object.assign(settings.attributes, {
+            enableMegaMenu: {
+                type: 'boolean',
+                default: false,
+            }
+        });
+    }
+
+    return settings;
+}
+
+wp.hooks.addFilter(
+    'blocks.registerBlockType',
+    'extend-nav-block/sub-nav-custom-attribute',
+    addSubNavAttribute
+);
+
 // Adding mega menu blockcontrol
 const addSubNavMegaMenuOption = createHigherOrderComponent((BlockEdit) => {
     return (props) => {
@@ -63,15 +87,19 @@ const addSubNavMegaMenuOption = createHigherOrderComponent((BlockEdit) => {
 
         const {attributes, setAttributes} = props;
 
+        const toggleMegaMenu = () => {
+            setAttributes({enableMegaMenu: !attributes.enableMegaMenu})
+        }
+
         return (
             <>
                 <BlockEdit {...props} />
 
                 <BlockControls group="block">
                     <ToolbarButton
-                        icon={ grid }
+                        icon={grid}
                         label="Mega Menu"
-                        onClick={() => alert('Editing')}
+                        onClick={toggleMegaMenu}
                     />
                 </BlockControls>
             </>
