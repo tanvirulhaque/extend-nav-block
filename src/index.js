@@ -86,20 +86,32 @@ const addSubNavMegaMenuOption = createHigherOrderComponent((BlockEdit) => {
         }
 
         const {attributes, setAttributes} = props;
+        const {enableMegaMenu} = attributes
 
         const toggleMegaMenu = () => {
-            setAttributes({enableMegaMenu: !attributes.enableMegaMenu})
+            setAttributes({enableMegaMenu: !enableMegaMenu})
         }
+
+        console.log(props)
 
         return (
             <>
-                <BlockEdit {...props} />
+                {
+                    enableMegaMenu ? (
+                        <div className="mega-menu-wrapper">
+                            <BlockEdit {...props} />
+                        </div>
+                    ) : (
+                        <BlockEdit {...props}/>
+                    )
+                }
 
                 <BlockControls group="block">
                     <ToolbarButton
                         icon={grid}
                         label="Mega Menu"
                         onClick={toggleMegaMenu}
+                        isPressed={enableMegaMenu}
                     />
                 </BlockControls>
             </>
